@@ -31,6 +31,8 @@ INSTALLED_APPS = [
     "drf_spectacular",
     # Local apps
     "apps.core",
+    "apps.accounts",
+    "apps.inventory",
 ]
 
 MIDDLEWARE = [
