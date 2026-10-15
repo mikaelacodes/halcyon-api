@@ -1,16 +1,5 @@
-"""Standardized JSON error schema for the API.
-
-Every error response (validation, auth, permission, not-found, throttling,
-unhandled 500s) is normalized to:
-
-    {
-        "error": {
-            "code": "validation_error",
-            "message": "A human-readable summary.",
-            "details": {...}  # optional, field-level or extra context
-        }
-    }
-"""
+# Every error response gets normalized to {"error": {"code", "message", "details"?}}
+# so API consumers don't have to branch on which kind of error they hit.
 
 from rest_framework.response import Response
 from rest_framework.views import exception_handler
@@ -29,11 +18,17 @@ def standardized_exception_handler(exc, context):
         message = str(data["detail"])
         details = None
     else:
-        message = "One or more fields failed validation." if isinstance(data, dict) else str(data)
+        message = (
+            "One or more fields failed validation."
+            if isinstance(data, dict)
+            else str(data)
+        )
         details = data
 
     error_body = {"code": code, "message": message}
     if details is not None:
         error_body["details"] = details
 
-    return Response({"error": error_body}, status=response.status_code, headers=response.headers)
+    return Response(
+        {"error": error_body}, status=response.status_code, headers=response.headers
+    )

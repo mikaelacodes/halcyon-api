@@ -26,7 +26,9 @@ class Supplier(models.Model):
 
 
 class Warehouse(models.Model):
-    code = models.CharField(max_length=10, unique=True, validators=[WAREHOUSE_CODE_VALIDATOR])
+    code = models.CharField(
+        max_length=10, unique=True, validators=[WAREHOUSE_CODE_VALIDATOR]
+    )
     name = models.CharField(max_length=255)
     location = models.CharField(max_length=255, blank=True)
 
@@ -91,8 +93,12 @@ class StockMovement(models.Model):
         SHIPMENT = "SHIPMENT", "Shipment"
         ADJUSTMENT = "ADJUSTMENT", "Adjustment"
 
-    product = models.ForeignKey(Product, on_delete=models.PROTECT, related_name="movements")
-    warehouse = models.ForeignKey(Warehouse, on_delete=models.PROTECT, related_name="movements")
+    product = models.ForeignKey(
+        Product, on_delete=models.PROTECT, related_name="movements"
+    )
+    warehouse = models.ForeignKey(
+        Warehouse, on_delete=models.PROTECT, related_name="movements"
+    )
     movement_type = models.CharField(max_length=20, choices=MovementType.choices)
     quantity = models.PositiveIntegerField(validators=[MinValueValidator(1)])
     recorded_by = models.ForeignKey(
