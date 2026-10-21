@@ -2,7 +2,6 @@
 pytest
 pytest-django
 pytest-cov
-factory-boy
 flake8
 black
 isort

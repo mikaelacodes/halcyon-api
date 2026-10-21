@@ -45,9 +45,7 @@ class Migration(migrations.Migration):
                 ),
             ],
             options={
-                "indexes": [
-                    models.Index(fields=["role"], name="accounts_pr_role_fae1f3_idx")
-                ],
+                "indexes": [models.Index(fields=["role"], name="accounts_pr_role_fae1f3_idx")],
             },
         ),
     ]

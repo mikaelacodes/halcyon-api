@@ -3,7 +3,8 @@ from django.db import connections
 from django.http import JsonResponse
 from django.utils import timezone
 from django.views import defaults
-from rest_framework import permissions, status
+from drf_spectacular.utils import extend_schema
+from rest_framework import permissions, serializers, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -13,12 +14,21 @@ from rest_framework.views import APIView
 PROCESS_STARTED_AT = timezone.now()
 
 
+class HealthCheckSerializer(serializers.Serializer):
+    """Documents the /health/ response shape for the OpenAPI schema; not used for input."""
+
+    status = serializers.ChoiceField(choices=["ok", "unhealthy"])
+    uptime_seconds = serializers.FloatField()
+    database = serializers.DictField()
+
+
 class HealthCheckView(APIView):
     """Liveness/readiness probe for load balancers and docker-compose healthchecks."""
 
     permission_classes = [permissions.AllowAny]
     authentication_classes = []
 
+    @extend_schema(responses=HealthCheckSerializer, tags=["health"])
     def get(self, request):
         db_connected, db_engine = self._check_database()
         uptime_seconds = (timezone.now() - PROCESS_STARTED_AT).total_seconds()
@@ -28,9 +38,7 @@ class HealthCheckView(APIView):
             "uptime_seconds": round(uptime_seconds, 2),
             "database": {"connected": db_connected, "engine": db_engine},
         }
-        http_status = (
-            status.HTTP_200_OK if db_connected else status.HTTP_503_SERVICE_UNAVAILABLE
-        )
+        http_status = status.HTTP_200_OK if db_connected else status.HTTP_503_SERVICE_UNAVAILABLE
         return Response(body, status=http_status)
 
     @staticmethod

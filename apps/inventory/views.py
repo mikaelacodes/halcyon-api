@@ -46,9 +46,7 @@ class ProductSupplierViewSet(viewsets.ModelViewSet):
 class StockMovementViewSet(viewsets.ModelViewSet):
     """Standard users can log movements (create); only admins edit/delete history."""
 
-    queryset = StockMovement.objects.select_related(
-        "product", "warehouse", "recorded_by"
-    )
+    queryset = StockMovement.objects.select_related("product", "warehouse", "recorded_by")
     serializer_class = StockMovementSerializer
     permission_classes = [IsAdminOrCreateOnly]
 

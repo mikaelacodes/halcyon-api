@@ -111,9 +111,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 "ordering": ["name"],
-                "indexes": [
-                    models.Index(fields=["name"], name="inventory_s_name_d435cf_idx")
-                ],
+                "indexes": [models.Index(fields=["name"], name="inventory_s_name_d435cf_idx")],
             },
         ),
         migrations.CreateModel(
@@ -229,9 +227,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AddIndex(
             model_name="product",
-            index=models.Index(
-                fields=["is_active"], name="inventory_p_is_acti_47a270_idx"
-            ),
+            index=models.Index(fields=["is_active"], name="inventory_p_is_acti_47a270_idx"),
         ),
         migrations.AddIndex(
             model_name="stockmovement",
@@ -241,8 +237,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AddIndex(
             model_name="stockmovement",
-            index=models.Index(
-                fields=["created_at"], name="inventory_s_created_05ebf5_idx"
-            ),
+            index=models.Index(fields=["created_at"], name="inventory_s_created_05ebf5_idx"),
         ),
     ]

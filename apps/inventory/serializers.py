@@ -35,9 +35,7 @@ class ProductSupplierSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    suppliers = ProductSupplierSerializer(
-        source="productsupplier_set", many=True, read_only=True
-    )
+    suppliers = ProductSupplierSerializer(source="productsupplier_set", many=True, read_only=True)
 
     class Meta:
         model = Product

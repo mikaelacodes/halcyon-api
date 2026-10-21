@@ -45,17 +45,11 @@ def standardized_exception_handler(exc, context):
         message = str(data["detail"])
         details = None
     else:
-        message = (
-            "One or more fields failed validation."
-            if isinstance(data, dict)
-            else str(data)
-        )
+        message = "One or more fields failed validation." if isinstance(data, dict) else str(data)
         details = data
 
     error_body = {"code": code, "message": message}
     if details is not None:
         error_body["details"] = details
 
-    return Response(
-        {"error": error_body}, status=response.status_code, headers=response.headers
-    )
+    return Response({"error": error_body}, status=response.status_code, headers=response.headers)

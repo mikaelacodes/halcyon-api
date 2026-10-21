@@ -26,9 +26,7 @@ class Supplier(models.Model):
 
 
 class Warehouse(models.Model):
-    code = models.CharField(
-        max_length=10, unique=True, validators=[WAREHOUSE_CODE_VALIDATOR]
-    )
+    code = models.CharField(max_length=10, unique=True, validators=[WAREHOUSE_CODE_VALIDATOR])
     name = models.CharField(max_length=255)
     location = models.CharField(max_length=255, blank=True)
 
@@ -47,9 +45,7 @@ class Product(models.Model):
         max_digits=10, decimal_places=2, validators=[MinValueValidator(0)]
     )
     reorder_threshold = models.PositiveIntegerField(default=0)
-    suppliers = models.ManyToManyField(
-        Supplier, through="ProductSupplier", related_name="products"
-    )
+    suppliers = models.ManyToManyField(Supplier, through="ProductSupplier", related_name="products")
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -76,9 +72,7 @@ class ProductSupplier(models.Model):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(
-                fields=["product", "supplier"], name="unique_product_supplier"
-            )
+            models.UniqueConstraint(fields=["product", "supplier"], name="unique_product_supplier")
         ]
 
     def __str__(self):
@@ -93,12 +87,8 @@ class StockMovement(models.Model):
         SHIPMENT = "SHIPMENT", "Shipment"
         ADJUSTMENT = "ADJUSTMENT", "Adjustment"
 
-    product = models.ForeignKey(
-        Product, on_delete=models.PROTECT, related_name="movements"
-    )
-    warehouse = models.ForeignKey(
-        Warehouse, on_delete=models.PROTECT, related_name="movements"
-    )
+    product = models.ForeignKey(Product, on_delete=models.PROTECT, related_name="movements")
+    warehouse = models.ForeignKey(Warehouse, on_delete=models.PROTECT, related_name="movements")
     movement_type = models.CharField(max_length=20, choices=MovementType.choices)
     quantity = models.PositiveIntegerField(validators=[MinValueValidator(1)])
     recorded_by = models.ForeignKey(
